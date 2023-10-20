@@ -1,5 +1,6 @@
 from time import time, sleep
 from threading import Thread
+from concurrent.futures import ThreadPoolExecutor
 
 def download_something(file_name):
     if file_name == 'd1':
@@ -31,7 +32,13 @@ def download_thread():
     t1.join()
     t2.join()
     
+def download_threadpool():
+    with ThreadPoolExecutor(max_workers=4) as pool:
+        files = ['d1', 'd2']
+        for file in files:
+            pool.submit(download_something, file_name = file)
+    
 if __name__ == '__main__':
-    print_time(download_thread)
+    # print_time(download_thread)
     
-    
+    print_time(download_threadpool)
